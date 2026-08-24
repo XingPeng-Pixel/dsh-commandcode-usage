@@ -13,10 +13,10 @@
   ],
   "type": "module",
   "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "types": "./lib/types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./lib/index.d.ts",
+      "types": "./lib/types/index.d.ts",
       "default": "./lib/index.js"
     },
     "./client": {
@@ -56,7 +56,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json && tsdown",
-    "prepare": "tsdown",
+    "prepare": "tsc -p tsconfig.build.json && tsdown",
     "typecheck": "tsc --noEmit",
     "test": "node --import tsx --test tests/**/*.test.ts"
   },
