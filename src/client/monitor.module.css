@@ -4,8 +4,9 @@
  * Self-contained color palette: the plugin defines its own CSS custom
  * properties at the top of this stylesheet instead of depending on the
  * dsh-client-ui-theme plugin. Values are tuned for the official DSH light
- * theme; a dark fallback is included via prefers-color-scheme so the widget
- * stays readable on dark systems.
+ * theme; dark values follow the WebUI Appearance setting via the standard
+ * `body[data-ds-dark-theme]` attribute (light/dark/system), so the widget
+ * stays in sync with the rest of the Web UI instead of only the OS theme.
  */
 
 .root,
@@ -23,21 +24,19 @@
   --cmda-monitor-danger: #ec1313;
 }
 
-@media (prefers-color-scheme: dark) {
-  .root,
-  .section {
-    --cmda-monitor-fg: #e9ecf2;
-    --cmda-monitor-fg-secondary: #adb2b8;
-    --cmda-monitor-border: rgba(255, 255, 255, .12);
-    --cmda-monitor-track: rgba(255, 255, 255, .10);
-    --cmda-monitor-card-bg: #232324;
-    --cmda-monitor-panel-bg: #2c2c2e;
-    --cmda-monitor-accent: #5686fe;
-    --cmda-monitor-blue: #5686fe;
-    --cmda-monitor-warn: #f7ad31;
-    --cmda-monitor-success: #22c55e;
-    --cmda-monitor-danger: #f25a5a;
-  }
+body[data-ds-dark-theme] .root,
+body[data-ds-dark-theme] .section {
+  --cmda-monitor-fg: #e9ecf2;
+  --cmda-monitor-fg-secondary: #adb2b8;
+  --cmda-monitor-border: rgba(255, 255, 255, .12);
+  --cmda-monitor-track: rgba(255, 255, 255, .10);
+  --cmda-monitor-card-bg: #232324;
+  --cmda-monitor-panel-bg: #2c2c2e;
+  --cmda-monitor-accent: #5686fe;
+  --cmda-monitor-blue: #5686fe;
+  --cmda-monitor-warn: #f7ad31;
+  --cmda-monitor-success: #22c55e;
+  --cmda-monitor-danger: #f25a5a;
 }
 
 .root {
@@ -216,6 +215,92 @@
   text-overflow: ellipsis;
 }
 
+/* Plan selector block: a full-width row above the dashboard grid. */
+.planBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--cmda-monitor-border);
+}
+
+.planHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.planLabel {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cmda-monitor-fg);
+  white-space: nowrap;
+}
+
+.planHint {
+  font-size: 11px;
+  color: var(--cmda-monitor-fg-secondary);
+}
+
+.planControls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.planSelect {
+  box-sizing: border-box;
+  flex: 1 1 220px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--cmda-monitor-border);
+  background: var(--cmda-monitor-panel-bg);
+  color: var(--cmda-monitor-fg);
+  font-size: 13px;
+  appearance: auto;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.planResetButton {
+  box-sizing: border-box;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--cmda-monitor-border);
+  background: var(--cmda-monitor-card-bg);
+  color: var(--cmda-monitor-fg-secondary);
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.planResetButton:disabled {
+  opacity: .55;
+  cursor: default;
+}
+
+.planState {
+  font-size: 11px;
+  color: var(--cmda-monitor-fg-secondary);
+  white-space: nowrap;
+}
+
+.planSummary {
+  font-size: 11px;
+  color: var(--cmda-monitor-fg-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 /* Settings page */
 
 .section {
@@ -292,8 +377,8 @@
 
 .dashboard {
   display: grid;
-  grid-template-columns: minmax(180px, 260px) 1fr;
-  gap: 20px;
+  grid-template-columns: minmax(160px, 240px) minmax(0, 1fr);
+  gap: 16px;
   align-items: start;
 }
 
@@ -402,9 +487,10 @@
 
 .barRow {
   display: grid;
-  grid-template-columns: 96px 1fr 86px;
+  grid-template-columns: 96px minmax(0, 1fr) minmax(86px, auto);
   gap: 10px;
   align-items: center;
+  min-width: 0;
 }
 
 .barLabel {
@@ -434,6 +520,9 @@
   text-align: right;
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .statsRow {

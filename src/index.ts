@@ -108,6 +108,30 @@ export function apply(ctx: Context, rawConfig: ConfigType): void {
     const info = await credentials.describe(credentialRef(credentialApiKeyEnv()))
     return { configured: info.configured, writable: info.writable }
   }
+  // Plan selection persists in the same Host credentials document as the API
+  // key (`.credentials.yaml`), using a dedicated non-secret reference.
+  const PLAN_REF = credentialRef('COMMANDCODE_PLAN_ID')
+  // Fail loudly: a broken credentials read must surface as a route error so
+  // the UI can show an actionable failure instead of silently pretending the
+  // user has no plan preference.
+  const getPlanPreference = async () => {
+    const credentials = ctx.get('credentials')
+    if (!credentials) {
+      throw new Error('credentials service unavailable: cannot read plan preference')
+    }
+    const hit = await credentials.resolve(PLAN_REF)
+    return hit?.value ?? ''
+  }
+  const setPlanPreference = async (planId: string) => {
+    const credentials = ctx.get('credentials')
+    if (!credentials) throw new Error('credentials service unavailable: cannot persist plan preference')
+    await credentials.set(PLAN_REF, planId)
+  }
+  const clearPlanPreference = async () => {
+    const credentials = ctx.get('credentials')
+    if (!credentials) return
+    await credentials.unset(PLAN_REF)
+  }
   const testCredential = async () => {
     const key = await resolveApiKey({ ctx, apiKeyEnv: credentialApiKeyEnv(), literalApiKey: cfg().apiKey || undefined })
     if (!key) return { ok: false, error: 'not-configured' }
@@ -171,6 +195,9 @@ export function apply(ctx: Context, rawConfig: ConfigType): void {
       clearCredential,
       testCredential,
       refreshStatus: () => poller.runNow(),
+      getPlanPreference,
+      setPlanPreference,
+      clearPlanPreference,
     })
     let disposeWatcher: (() => void) | undefined
     if (cfg().enableSessionCost) {
@@ -185,17 +212,14 @@ export function apply(ctx: Context, rawConfig: ConfigType): void {
   }, 'commandcode-usage-monitor: poller, routes, watcher, ui routes')
 
   // The CMDAI UI preferences namespace: the browser settings page edits it
-  // through the client settings scope; the Host keeps the source for future
-  // host-side dynamic behavior.
+  // through the client settings scope; the Host keeps the source for host-side
+  // dynamic behavior.
   let uiSource: () => ConfigType['ui'] = () => cfg().ui ?? {}
   installSettingsSection(ctx, UI_SETTINGS_NAMESPACE, UiConfig, cfg().ui ?? {}, {
     setSource: (source) => {
       uiSource = source
     },
-    onChange: () => {
-      // The browser half reads this namespace directly; no host-side side
-      // effect depends on these values yet.
-    },
+    onChange: () => {},
   })
 
   // The `/commandcode-usage` command rides the optional `commands` service:

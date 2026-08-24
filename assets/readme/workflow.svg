@@ -2,84 +2,88 @@
   <title id="title">dsh-commandcode-usage-monitor 数据流</title>
   <desc id="desc">Host 侧轮询 Command Code /alpha/* 接口，写入内存快照，暴露同源 JSON 路由；浏览器挂件与设置页读取路由，SessionWatcher 发布每轮消耗，斜杠命令直接查询快照。</desc>
 
-  <rect width="1200" height="480" rx="24" fill="#0d1117"/>
+  <rect width="1200" height="560" rx="24" fill="#0d1117"/>
 
   <text x="64" y="42" fill="#f0f3f8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="34" font-weight="800">工作原理</text>
   <text x="64" y="78" fill="#8b98a9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20">低频轮询 · 内存快照 · 同源 JSON · 浏览器零密钥接触</text>
 
   <!-- Session event source -->
-  <g transform="translate(320 110)">
-    <rect x="0" y="0" width="200" height="76" rx="16" fill="#111827" stroke="#f59e0b" stroke-width="1.5"/>
-    <text x="100" y="30" fill="#f0f3f8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="700" text-anchor="middle">DSH Session Events</text>
-    <text x="100" y="56" fill="#aab4c2" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" text-anchor="middle">session/event</text>
-    <path d="M200 38 H260" stroke="#f59e0b" stroke-width="3" fill="none"/>
-    <polygon points="260,38 248,31 248,45" fill="#f59e0b"/>
+  <g transform="translate(340 110)">
+    <rect x="0" y="0" width="240" height="76" rx="16" fill="#111827" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="120" y="30" fill="#f0f3f8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="700" text-anchor="middle">DSH Session Events</text>
+    <text x="120" y="56" fill="#aab4c2" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15" text-anchor="middle">session/event</text>
+    <path d="M240 38 H276" stroke="#f59e0b" stroke-width="3" fill="none"/>
+    <polygon points="276,38 264,31 264,45" fill="#f59e0b"/>
   </g>
 
   <!-- SessionWatcher -->
-  <g transform="translate(584 110)">
-    <rect x="0" y="0" width="200" height="76" rx="16" fill="#151d2b" stroke="#f59e0b" stroke-width="1.5"/>
-    <text x="100" y="30" fill="#f0f3f8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="700" text-anchor="middle">SessionWatcher</text>
-    <text x="100" y="56" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="15" text-anchor="middle">每轮 Token / 成本聚合</text>
-    <path d="M100 76 L100 150" stroke="#f59e0b" stroke-width="3" fill="none"/>
-    <polygon points="100,150 92,138 108,138" fill="#f59e0b"/>
+  <g transform="translate(624 110)">
+    <rect x="0" y="0" width="240" height="76" rx="16" fill="#151d2b" stroke="#f59e0b" stroke-width="1.5"/>
+    <text x="120" y="30" fill="#f0f3f8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="700" text-anchor="middle">SessionWatcher</text>
+    <text x="120" y="56" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="15" text-anchor="middle">每轮 Token / 成本聚合</text>
+    <path d="M120 76 L120 242" stroke="#f59e0b" stroke-width="3" fill="none"/>
+    <polygon points="120,242 112,230 128,230" fill="#f59e0b"/>
   </g>
 
   <!-- Main pipeline row -->
-  <g transform="translate(64 260)">
+  <g transform="translate(64 250)">
     <!-- Command Code API -->
-    <rect x="0" y="0" width="200" height="120" rx="16" fill="#111827" stroke="#5686fe" stroke-width="1.5"/>
-    <text x="100" y="34" fill="#5686fe" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700" text-anchor="middle">/alpha/*</text>
-    <text x="100" y="62" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">whoami · usage</text>
-    <text x="100" y="88" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">credits · plan</text>
-    <text x="100" y="108" fill="#6b7686" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" text-anchor="middle">Command Code</text>
-    <path d="M200 60 H260" stroke="#5686fe" stroke-width="3" fill="none"/>
-    <polygon points="260,60 248,53 248,67" fill="#5686fe"/>
+    <rect x="0" y="0" width="240" height="120" rx="16" fill="#111827" stroke="#5686fe" stroke-width="1.5"/>
+    <text x="120" y="34" fill="#5686fe" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700" text-anchor="middle">/alpha/*</text>
+    <text x="120" y="62" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">whoami · usage</text>
+    <text x="120" y="88" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">credits · plan</text>
+    <text x="120" y="108" fill="#6b7686" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" text-anchor="middle">Command Code</text>
+    <path d="M240 60 H272" stroke="#5686fe" stroke-width="3" fill="none"/>
+    <polygon points="272,60 260,53 260,67" fill="#5686fe"/>
 
     <!-- CommandCodeClient + poller -->
-    <rect x="264" y="0" width="200" height="120" rx="16" fill="#151d2b" stroke="#4176e6" stroke-width="1.5"/>
-    <text x="364" y="34" fill="#f0f3f8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="700" text-anchor="middle">CommandCodeClient</text>
-    <text x="364" y="62" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">归一化 + 超时 + 重试</text>
-    <text x="364" y="88" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">UsagePoller 60s 轮询</text>
-    <text x="364" y="108" fill="#6b7686" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" text-anchor="middle">client.ts · poller.ts</text>
-    <path d="M464 60 H524" stroke="#5686fe" stroke-width="3" fill="none"/>
-    <polygon points="524,60 512,53 512,67" fill="#5686fe"/>
+    <rect x="280" y="0" width="240" height="120" rx="16" fill="#151d2b" stroke="#4176e6" stroke-width="1.5"/>
+    <text x="400" y="34" fill="#f0f3f8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="700" text-anchor="middle">CommandCodeClient</text>
+    <text x="400" y="62" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">归一化 + 超时 + 重试</text>
+    <text x="400" y="88" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">UsagePoller 60s 轮询</text>
+    <text x="400" y="108" fill="#6b7686" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" text-anchor="middle">client.ts · poller.ts</text>
+    <path d="M520 60 H552" stroke="#5686fe" stroke-width="3" fill="none"/>
+    <polygon points="552,60 540,53 540,67" fill="#5686fe"/>
 
     <!-- Store -->
-    <rect x="528" y="0" width="200" height="120" rx="16" fill="#151d2b" stroke="#4176e6" stroke-width="1.5"/>
-    <text x="628" y="34" fill="#f0f3f8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="700" text-anchor="middle">UsageStore</text>
-    <text x="628" y="62" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">内存快照</text>
-    <text x="628" y="88" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">revision 递增</text>
-    <text x="628" y="108" fill="#6b7686" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" text-anchor="middle">store.ts</text>
-    <path d="M728 60 H788" stroke="#5686fe" stroke-width="3" fill="none"/>
-    <polygon points="788,60 776,53 776,67" fill="#5686fe"/>
+    <rect x="560" y="0" width="240" height="120" rx="16" fill="#151d2b" stroke="#4176e6" stroke-width="1.5"/>
+    <text x="680" y="34" fill="#f0f3f8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="700" text-anchor="middle">UsageStore</text>
+    <text x="680" y="62" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">内存快照</text>
+    <text x="680" y="88" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">revision 递增</text>
+    <text x="680" y="108" fill="#6b7686" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" text-anchor="middle">store.ts</text>
+    <path d="M800 60 H832" stroke="#5686fe" stroke-width="3" fill="none"/>
+    <polygon points="832,60 820,53 820,67" fill="#5686fe"/>
 
     <!-- JSON routes -->
-    <rect x="792" y="0" width="240" height="120" rx="16" fill="#111827" stroke="#22c55e" stroke-width="1.5"/>
-    <text x="912" y="34" fill="#22c55e" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700" text-anchor="middle">/commandcode-usage/*</text>
-    <text x="912" y="62" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">status.json · turn-cost.json</text>
-    <text x="912" y="88" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">health · credential · refresh</text>
-    <text x="912" y="108" fill="#6b7686" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" text-anchor="middle">routes.ts · ui-routes.ts</text>
+    <rect x="840" y="0" width="240" height="120" rx="16" fill="#111827" stroke="#22c55e" stroke-width="1.5"/>
+    <text x="960" y="34" fill="#22c55e" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700" text-anchor="middle">/commandcode-usage/*</text>
+    <text x="960" y="62" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">status.json · turn-cost.json</text>
+    <text x="960" y="88" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">health · credential · refresh</text>
+    <text x="960" y="108" fill="#6b7686" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" text-anchor="middle">routes.ts · ui-routes.ts</text>
   </g>
 
+  <!-- Store -> Slash command -->
+  <path d="M744 370 L744 392" stroke="#5686fe" stroke-width="3" fill="none"/>
+  <polygon points="744,400 736,390 752,390" fill="#5686fe"/>
+
+  <!-- Routes -> Browser -->
+  <path d="M1024 370 L1024 392" stroke="#22c55e" stroke-width="3" fill="none"/>
+  <polygon points="1024,400 1016,390 1032,390" fill="#22c55e"/>
+
   <!-- Consumers -->
+  <!-- Slash command -->
+  <g transform="translate(624 400)">
+    <rect x="0" y="0" width="240" height="96" rx="16" fill="#111827" stroke="#5686fe" stroke-width="1.5"/>
+    <text x="120" y="34" fill="#f0f3f8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700" text-anchor="middle">/commandcode-usage</text>
+    <text x="120" y="62" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">聊天内用量仪表盘</text>
+    <text x="120" y="84" fill="#6b7686" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" text-anchor="middle">commands.ts</text>
+  </g>
+
   <!-- Browser -->
-  <g transform="translate(832 420)">
+  <g transform="translate(904 400)">
     <rect x="0" y="0" width="240" height="96" rx="16" fill="#151d2b" stroke="#22c55e" stroke-width="1.5"/>
     <text x="120" y="34" fill="#f0f3f8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="700" text-anchor="middle">浏览器端</text>
     <text x="120" y="62" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">侧边栏挂件 · 设置页仪表盘</text>
     <text x="120" y="84" fill="#6b7686" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" text-anchor="middle">src/client/</text>
-    <path d="M120 -40 L120 -8" stroke="#22c55e" stroke-width="3" fill="none"/>
-    <polygon points="120,-8 112,-16 128,-16" fill="#22c55e"/>
-  </g>
-
-  <!-- Slash command -->
-  <g transform="translate(568 420)">
-    <rect x="0" y="0" width="200" height="96" rx="16" fill="#111827" stroke="#5686fe" stroke-width="1.5"/>
-    <text x="100" y="34" fill="#f0f3f8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18" font-weight="700" text-anchor="middle">/commandcode-usage</text>
-    <text x="100" y="62" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" text-anchor="middle">聊天内用量仪表盘</text>
-    <text x="100" y="84" fill="#6b7686" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="14" text-anchor="middle">commands.ts</text>
-    <path d="M100 -40 L100 -8" stroke="#5686fe" stroke-width="3" fill="none"/>
-    <polygon points="100,-8 92,-16 108,-16" fill="#5686fe"/>
   </g>
 </svg>

@@ -5,6 +5,8 @@
  * receives or forwards a Command Code API key.
  */
 
+import type { PlanOption } from '../plan.ts'
+
 /** Progress-bar/limit shape returned by `/commandcode-usage/status.json`. */
 export interface WindowLimit {
   used: number
@@ -79,6 +81,14 @@ export interface CredentialStatus {
   writable: boolean
 }
 
+/** One option in the settings page Plan dropdown. */
+export type PlanOptionDto = PlanOption
+
+export interface PlansResponse {
+  ok: boolean
+  options: PlanOptionDto[]
+}
+
 async function getJson<T>(path: string, timeoutMs = 12000): Promise<T> {
   const response = await fetch(path, {
     headers: { accept: 'application/json' },
@@ -96,6 +106,11 @@ export function fetchStatus(): Promise<StatusResponse> {
 /** Fetch the last completed turn record. */
 export function fetchTurnCost(): Promise<TurnCostResponse> {
   return getJson<TurnCostResponse>('/commandcode-usage/turn-cost.json')
+}
+
+/** Fetch the full Plan dropdown catalog exposed by the Host routes. */
+export function fetchPlans(): Promise<PlansResponse> {
+  return getJson<PlansResponse>('/commandcode-usage/plans.json')
 }
 
 /** Describe whether an API key is configured and whether the Host can write it. */
@@ -144,4 +159,30 @@ export async function refreshStatus(): Promise<void> {
     body: '{}',
   })
   if (!response.ok) throw new Error(`refresh status failed: ${response.status}`)
+}
+
+/** Read the persisted Plan id preference ('' = follow the account plan). */
+export async function getPlanPreference(): Promise<string> {
+  const body = await getJson<{ ok: boolean; planId?: string }>('/commandcode-usage/plan-preference.json')
+  return body.planId ?? ''
+}
+
+/** Persist the selected Plan id through the Host credentials document. */
+export async function setPlanPreference(planId: string): Promise<void> {
+  const response = await fetch('/commandcode-usage/plan-preference.json', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ planId }),
+  })
+  const body = (await response.json()) as { ok: boolean; error?: string }
+  if (!response.ok || body.ok !== true) throw new Error(body.error ?? 'write plan preference failed')
+}
+
+/** Clear the persisted Plan id preference (resume following the account plan). */
+export async function clearPlanPreference(): Promise<void> {
+  const response = await fetch('/commandcode-usage/plan-preference.json', {
+    method: 'DELETE',
+  })
+  const body = (await response.json()) as { ok: boolean; error?: string }
+  if (!response.ok || body.ok !== true) throw new Error(body.error ?? 'clear plan preference failed')
 }

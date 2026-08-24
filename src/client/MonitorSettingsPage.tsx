@@ -7,7 +7,7 @@
  * only to the same-origin status route.
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { InjectFace, PropsLocale, PropsRuntime } from '@deepseek-ai/dsh-client-ui-slots'
 import {
   clearCredential,
@@ -15,8 +15,9 @@ import {
   setCredential,
   testCredential,
 } from './api.ts'
-import { monthlyUsedCredits, planFiveHourCap, planMonthlyCap, planWeeklyCap } from '../plan.ts'
+import { monthlyUsedCredits, planFiveHourCap, planMonthlyCap, planWeeklyCap, planDisplayName, PLAN_OPTIONS } from '../plan.ts'
 import { compactNumber, money, primaryAccount, ratio, requestMonitorRefresh, useMonitorStatus, useTurnWatch } from './use-monitor.ts'
+import { clearPlanPreference, fetchPlans, getPlanPreference, setPlanPreference, type PlanOptionDto } from './api.ts'
 import css from './monitor.module.css'
 
 /** The inject face for the settings page: credential verbs and status refresh. */
@@ -37,6 +38,20 @@ function barColor(kind: 'fiveHour' | 'weekly' | 'monthly'): string {
   if (kind === 'fiveHour') return 'var(--cmda-monitor-blue)'
   if (kind === 'weekly') return 'var(--cmda-monitor-warn)'
   return 'var(--cmda-monitor-success)'
+}
+
+/** Human label for a plan option: friendly name, with raw id only for unknown plans. */
+function planLabel(option: { id: string; name: string }): string {
+  if (!option.name || option.name === option.id) return option.id
+  return option.name
+}
+
+/** Summary line under the selector: shows the active plan in the same style. */
+function planSummaryLabel(id: string, options: readonly { id: string; name: string }[]): string {
+  const option = options.find((item) => item.id === id)
+  if (option) return planLabel(option)
+  const name = planDisplayName(id)
+  return name && name !== id ? name : id
 }
 
 function WindowBar({ label, used, cap, color, t }: {
@@ -152,18 +167,19 @@ export function MonitorSettingsPage({ t, refresh }: MonitorSettingsPageProps) {
   const usage = report?.usage
   const plan = report?.plan
 
-  // Use the official plan caps when known; otherwise fall back to the
-  // API-reported window caps.
-  const monthCap = planMonthlyCap(plan?.planId)
-    ?? (usage?.totalCost ?? 0) + (credits?.monthlyCredits ?? 0)
-  const monthUsed = monthlyUsedCredits(plan?.planId, credits?.monthlyCredits)
-    ?? (usage?.totalCost ?? 0)
-  const window5hCap = planFiveHourCap(plan?.planId) ?? credits?.fiveHour.cap ?? 0
-  const weeklyCap = planWeeklyCap(plan?.planId) ?? credits?.weekly.cap ?? 0
+  const currentPlanId = plan?.planId ?? ''
 
   const [keyDraft, setKeyDraft] = useState('')
   const [keyState, setKeyState] = useState<KeyState>({ phase: 'unknown' })
   const [testResult, setTestResult] = useState<string | null>(null)
+  // Seed from the shared catalog so the dropdown is populated even before
+  // `/plans.json` resolves.
+  const [planOptions, setPlanOptions] = useState<PlanOptionDto[]>(PLAN_OPTIONS)
+  const [planPreference, setPlanPreference] = useState<string | null>(null)
+  const [planSaveState, setPlanSaveState] = useState<'idle' | 'saving' | 'saved' | 'cleared' | 'failed'>('idle')
+  const [planLoadState, setPlanLoadState] = useState<'loading' | 'ready' | 'error'>('loading')
+  const [planLoadError, setPlanLoadError] = useState<string | null>(null)
+  const userEditedPlan = useRef(false)
 
   useEffect(() => {
     let disposed = false
@@ -171,8 +187,59 @@ export function MonitorSettingsPage({ t, refresh }: MonitorSettingsPageProps) {
       (status) => { if (!disposed) setKeyState({ phase: 'idle', configured: status.configured, writable: status.writable }) },
       () => { if (!disposed) setKeyState({ phase: 'unknown' }) },
     )
+    fetchPlans().then(
+      (response) => { if (!disposed) setPlanOptions(response.options.length > 0 ? response.options : PLAN_OPTIONS) },
+      () => {},
+    )
+    getPlanPreference().then(
+      (value) => {
+        if (disposed) return
+        if (!userEditedPlan.current) setPlanPreference(value)
+        setPlanLoadState('ready')
+      },
+      (error) => {
+        if (disposed) return
+        setPlanLoadState('error')
+        setPlanLoadError(error instanceof Error ? error.message : String(error))
+      },
+    )
     return () => { disposed = true }
   }, [])
+
+  const activePlanId = (planPreference && planPreference.length > 0)
+    ? planPreference
+    : currentPlanId
+
+  const effectivePlanId = activePlanId || currentPlanId
+  const monthCap = planMonthlyCap(effectivePlanId)
+    ?? (usage?.totalCost ?? 0) + (credits?.monthlyCredits ?? 0)
+  const monthUsed = monthlyUsedCredits(effectivePlanId, credits?.monthlyCredits)
+    ?? (usage?.totalCost ?? 0)
+  const window5hCap = planFiveHourCap(effectivePlanId) ?? credits?.fiveHour.cap ?? 0
+  const weeklyCap = planWeeklyCap(effectivePlanId) ?? credits?.weekly.cap ?? 0
+
+  const knownPlanIds = new Set(planOptions.map((option) => option.id))
+  const unknownActivePlan = activePlanId && !knownPlanIds.has(activePlanId)
+    ? { id: activePlanId, name: planDisplayName(activePlanId) }
+    : null
+
+  const savePlanPreference = async (value: string): Promise<void> => {
+    userEditedPlan.current = true
+    setPlanSaveState('saving')
+    try {
+      if (value === '') {
+        await clearPlanPreference()
+        setPlanPreference('')
+        setPlanSaveState('cleared')
+      } else {
+        await setPlanPreference(value)
+        setPlanPreference(value)
+        setPlanSaveState('saved')
+      }
+    } catch {
+      setPlanSaveState('failed')
+    }
+  }
 
   const saveKey = async (): Promise<void> => {
     const value = keyDraft.trim()
@@ -273,6 +340,57 @@ export function MonitorSettingsPage({ t, refresh }: MonitorSettingsPageProps) {
 
       <div className={css.card}>
         <div className={css.cardTitle}>{t('settings.widgetTitle')}</div>
+
+        <div className={css.planBlock}>
+          <div className={css.planHeader}>
+            <label className={css.planLabel} htmlFor="commandcode-plan">{t('settings.planTitle')}</label>
+            {planPreference && planPreference.length > 0 ? (
+              <button
+                type="button"
+                className={css.planResetButton}
+                disabled={planSaveState === 'saving'}
+                onClick={() => { void savePlanPreference('') }}
+              >
+                {t('settings.planAuto')}
+              </button>
+            ) : null}
+          </div>
+          <div className={css.planHint}>{t('settings.planHint')}</div>
+          <div className={css.planControls}>
+            <select
+              id="commandcode-plan"
+              className={css.planSelect}
+              value={activePlanId}
+              onChange={(event) => { void savePlanPreference(event.target.value) }}
+              disabled={planSaveState === 'saving'}
+              aria-label={t('settings.planPlaceholder')}
+            >
+              <option value="">{t('settings.planAuto')}</option>
+              {unknownActivePlan ? (
+                <option value={unknownActivePlan.id}>{planLabel(unknownActivePlan)}</option>
+              ) : null}
+              {planOptions.map((option) => (
+                <option
+                  key={option.id}
+                  value={option.id}
+                  title={`${option.name}${option.id !== option.name ? ` — ${option.id}` : ''}${option.monthlyCredits !== undefined ? ` · $${option.monthlyCredits}/mo credits` : ''}`}
+                >
+                  {planLabel(option)}
+                </option>
+              ))}
+            </select>
+            {planSaveState === 'saved' ? <span className={css.planState}>{t('settings.planSaved')}</span> : null}
+            {planSaveState === 'cleared' ? <span className={css.planState}>{t('settings.planCleared')}</span> : null}
+            {planSaveState === 'failed' ? <span className={css.planState}>{t('settings.planSaveFailed')}</span> : null}
+            {planLoadState === 'error' ? <span className={css.planState} title={planLoadError ?? ''}>{t('settings.planLoadFailed')}</span> : null}
+          </div>
+          <div className={css.planSummary}>
+            {activePlanId
+              ? planSummaryLabel(activePlanId, planOptions)
+              : t('settings.planAuto')}
+          </div>
+        </div>
+
         <div className={css.dashboard}>
           <UsageGauge
             used={monthUsed}
@@ -282,11 +400,6 @@ export function MonitorSettingsPage({ t, refresh }: MonitorSettingsPageProps) {
             free={credits?.freeCredits}
             t={t}
           />
-          {plan?.planId ? (
-            <div className={css.statusLine}>
-              {plan?.name ? `${plan.name} · ` : ''}{plan.planId}
-            </div>
-          ) : null}
           <div className={css.bars}>
             <WindowBar label={t('settings.window5h')} used={credits?.fiveHour.used} cap={window5hCap} color={barColor('fiveHour')} t={t} />
             <WindowBar label={t('settings.windowWeekly')} used={credits?.weekly.used} cap={weeklyCap} color={barColor('weekly')} t={t} />

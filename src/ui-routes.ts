@@ -10,6 +10,7 @@
 
 import type { IncomingMessage, ServerResponse } from 'node:http'
 import type { WebRoute } from '@deepseek-ai/dsh-host-webserver'
+import { PLAN_OPTIONS } from './plan.ts'
 
 export const UI_PREFIX = '/commandcode-usage'
 
@@ -25,6 +26,12 @@ export interface UiRouteDeps {
   testCredential: () => Promise<{ ok: boolean; error?: string }>
   /** Force a poller run and wait for it to finish. */
   refreshStatus: () => Promise<void>
+  /** Read the persisted Plan id ('' when not set). */
+  getPlanPreference: () => Promise<string>
+  /** Persist a Plan id through the same Host credentials document. */
+  setPlanPreference: (planId: string) => Promise<void>
+  /** Clear the persisted Plan id. */
+  clearPlanPreference: () => Promise<void>
 }
 
 function json(res: ServerResponse, status: number, body: unknown): void {
@@ -127,6 +134,47 @@ export function makeUiRoutes(deps: UiRouteDeps): WebRoute[] {
           }
           await deps.refreshStatus()
           json(res, 200, { ok: true })
+        } catch (error) {
+          json(res, 500, {
+            ok: false,
+            error: error instanceof Error ? error.message : String(error),
+          })
+        }
+      },
+    },
+    {
+      kind: 'exact',
+      path: `${UI_PREFIX}/plans.json`,
+      handler: async (_req, res) => {
+        json(res, 200, { ok: true, options: PLAN_OPTIONS })
+      },
+    },
+    {
+      kind: 'exact',
+      path: `${UI_PREFIX}/plan-preference.json`,
+      handler: async (req, res) => {
+        try {
+          if (req.method === 'GET') {
+            json(res, 200, { ok: true, planId: await deps.getPlanPreference() })
+            return
+          }
+          if (req.method === 'POST') {
+            const raw = await readBody(req)
+            const parsed = JSON.parse(raw) as { planId?: unknown }
+            if (typeof parsed.planId !== 'string') {
+              json(res, 400, { ok: false, error: 'planId must be a string' })
+              return
+            }
+            await deps.setPlanPreference(parsed.planId.trim())
+            json(res, 200, { ok: true, planId: parsed.planId.trim() })
+            return
+          }
+          if (req.method === 'DELETE') {
+            await deps.clearPlanPreference()
+            json(res, 200, { ok: true, planId: '' })
+            return
+          }
+          json(res, 405, { ok: false, error: 'method-not-allowed' })
         } catch (error) {
           json(res, 500, {
             ok: false,
