@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build output
+lib/
+dist/
+
+# Local DSH loopback test home
+dsh-test-home/
+
+# Local tooling / editor
+.codegraph/
+.idea/
+.vscode/
+*.log
+.DS_Store
+
+# Environment / secrets
+.env
+.env.*
+!.env.example

@@ -1,0 +1,11 @@
+# dsh-commandcode-usage-monitor bundle layer.
+# One plugin row: host-side Command Code usage monitor.
+#
+# name is the full package specifier; when developing locally use
+#   dsh plugin --profile web add link:<absolute path to this repo>
+- insert:
+    - id: commandcode-usage-monitor
+      name: dsh-commandcode-usage-monitor
+      config:
+        apiKeyEnv: COMMANDCODE_API_KEY
+        pollIntervalMs: 60000

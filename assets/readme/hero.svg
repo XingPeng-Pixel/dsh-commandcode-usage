@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">dsh-commandcode-usage-monitor — Command Code 用量实时监测</title>
+  <desc id="desc">DSH 插件：Host 侧抓取 Command Code /alpha/* 用量与额度，浏览器侧提供侧边栏挂件和设置页仪表盘，且不接触明文 API Key。</desc>
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1117"/>
+      <stop offset="1" stop-color="#0a0e14"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#4176e6"/>
+      <stop offset="1" stop-color="#22c55e"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="420" rx="24" fill="url(#bg)"/>
+  <rect x="0" y="0" width="8" height="420" fill="url(#accent)"/>
+
+  <!-- Left: identity -->
+  <g id="title-block" transform="translate(64 88)">
+    <text x="0" y="0" fill="#5686fe" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20" font-weight="700" letter-spacing="2">DSH PLUGIN · HOST + BROWSER</text>
+    <text x="0" y="76" fill="#f0f3f8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="62" font-weight="800">Command Code</text>
+    <text x="0" y="150" fill="#f0f3f8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="62" font-weight="800">用量实时监测</text>
+    <text x="0" y="222" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="24">实时同步官方 CLI <tspan font-family="ui-monospace, SFMono-Regular, Menlo, monospace" fill="#d6deeb">/usage</tspan> 同源接口</text>
+    <text x="0" y="258" fill="#aab4c2" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="24">掌握 5 小时 / 每周 / 月度额度与每轮消耗</text>
+    <text x="0" y="316" fill="#6b7686" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20">v0.1.0 · dsh-commandcode-usage-monitor · MIT</text>
+  </g>
+
+  <!-- Right: real UI-shaped proof -->
+  <g id="project-proof" transform="translate(690 64)">
+    <rect width="450" height="330" rx="20" fill="#111827" stroke="#253041" stroke-width="1.5"/>
+    <rect x="0" y="0" width="450" height="52" rx="20" fill="#151d2b"/>
+    <circle cx="26" cy="26" r="5" fill="#ec1313"/>
+    <circle cx="44" cy="26" r="5" fill="#f59e0b"/>
+    <circle cx="62" cy="26" r="5" fill="#22c55e"/>
+    <text x="90" y="32" fill="#d6deeb" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="20" font-weight="700">◉ CMDAI 用量监控</text>
+    <rect x="366" y="14" width="66" height="26" rx="13" fill="#4176e6" opacity="0.18"/>
+    <text x="399" y="32" fill="#5686fe" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="16" font-weight="700" text-anchor="middle">LIVE</text>
+
+    <!-- 5h bar -->
+    <text x="24" y="92" fill="#8b98a9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18">5 小时窗口</text>
+    <rect x="160" y="76" width="200" height="14" rx="7" fill="#1b2534"/>
+    <rect x="160" y="76" width="52" height="14" rx="7" fill="#5686fe"/>
+    <text x="430" y="91" fill="#f0f3f8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700" text-anchor="end">26%</text>
+
+    <!-- weekly bar -->
+    <text x="24" y="138" fill="#8b98a9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18">每周窗口</text>
+    <rect x="160" y="122" width="200" height="14" rx="7" fill="#1b2534"/>
+    <rect x="160" y="122" width="76" height="14" rx="7" fill="#f59e0b"/>
+    <text x="430" y="137" fill="#f0f3f8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700" text-anchor="end">38%</text>
+
+    <!-- monthly bar -->
+    <text x="24" y="184" fill="#8b98a9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18">月度 Credits</text>
+    <rect x="160" y="168" width="200" height="14" rx="7" fill="#1b2534"/>
+    <rect x="160" y="168" width="38" height="14" rx="7" fill="#22c55e"/>
+    <text x="430" y="183" fill="#f0f3f8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700" text-anchor="end">19%</text>
+
+    <!-- stats -->
+    <line x1="24" y1="214" x2="426" y2="214" stroke="#253041" stroke-width="1"/>
+    <text x="24" y="242" fill="#8b98a9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18">Token 入 / 出</text>
+    <text x="244" y="242" fill="#8b98a9" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="18">请求 / 花费</text>
+    <text x="24" y="272" fill="#f0f3f8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700">242.4M / 1.2M</text>
+    <text x="244" y="272" fill="#f0f3f8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700">1.4K / $13.29</text>
+
+    <!-- endpoint -->
+    <rect x="24" y="288" width="402" height="24" rx="12" fill="#0b1320"/>
+    <text x="40" y="304" fill="#5686fe" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="16">GET /commandcode-usage/status.json</text>
+  </g>
+</svg>

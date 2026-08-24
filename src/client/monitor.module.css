@@ -1,0 +1,474 @@
+/**
+ * CMDAI monitoring surface styles.
+ *
+ * Self-contained color palette: the plugin defines its own CSS custom
+ * properties at the top of this stylesheet instead of depending on the
+ * dsh-client-ui-theme plugin. Values are tuned for the official DSH light
+ * theme; a dark fallback is included via prefers-color-scheme so the widget
+ * stays readable on dark systems.
+ */
+
+.root,
+.section {
+  --cmda-monitor-fg: #1b1b1c;
+  --cmda-monitor-fg-secondary: #61666b;
+  --cmda-monitor-border: rgba(0, 0, 0, .07);
+  --cmda-monitor-track: rgba(38, 49, 72, .08);
+  --cmda-monitor-card-bg: #ffffff;
+  --cmda-monitor-panel-bg: #f5f6f7;
+  --cmda-monitor-accent: #4176e6;
+  --cmda-monitor-blue: #4176e6;
+  --cmda-monitor-warn: #f59e0b;
+  --cmda-monitor-success: #22c55e;
+  --cmda-monitor-danger: #ec1313;
+}
+
+@media (prefers-color-scheme: dark) {
+  .root,
+  .section {
+    --cmda-monitor-fg: #e9ecf2;
+    --cmda-monitor-fg-secondary: #adb2b8;
+    --cmda-monitor-border: rgba(255, 255, 255, .12);
+    --cmda-monitor-track: rgba(255, 255, 255, .10);
+    --cmda-monitor-card-bg: #232324;
+    --cmda-monitor-panel-bg: #2c2c2e;
+    --cmda-monitor-accent: #5686fe;
+    --cmda-monitor-blue: #5686fe;
+    --cmda-monitor-warn: #f7ad31;
+    --cmda-monitor-success: #22c55e;
+    --cmda-monitor-danger: #f25a5a;
+  }
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--cmda-monitor-fg);
+  user-select: none;
+}
+
+.miniCard {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--cmda-monitor-border);
+  border-radius: 10px;
+  background: var(--cmda-monitor-card-bg);
+  padding: 8px 10px;
+  overflow: hidden;
+}
+
+.miniHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.miniTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--cmda-monitor-accent);
+  white-space: nowrap;
+}
+
+.miniLive {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  color: var(--cmda-monitor-accent);
+  background: color-mix(in srgb, var(--cmda-monitor-accent) 12%, transparent);
+  white-space: nowrap;
+}
+
+.miniLive[data-state='updating'] {
+  color: var(--cmda-monitor-warn);
+  background: color-mix(in srgb, var(--cmda-monitor-warn) 12%, transparent);
+}
+
+.miniRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--cmda-monitor-fg-secondary);
+  margin: 3px 0;
+}
+
+/* Fixed-width text frame: guarantees every row's bar starts at the same X. */
+.miniLabelFrame {
+  flex: 0 0 76px;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Bar frame: the remaining width is shared between the bar and its value. */
+.miniBarFrame {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.miniBar {
+  position: relative;
+  height: 8px;
+  border-radius: 5px;
+  background: var(--cmda-monitor-track);
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+}
+
+.miniFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 5px;
+  transition: width .3s ease;
+}
+
+/* Right-aligned numeric value; fixed width keeps all bars parallel. */
+.miniValue {
+  flex: 0 0 40px;
+  min-width: 0;
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--cmda-monitor-fg);
+}
+
+.miniStats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+  gap: 6px 8px;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--cmda-monitor-border);
+}
+
+/* Stacked label/value layout: labels and values wrap naturally in narrow widths. */
+.miniStat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
+  min-width: 0;
+}
+
+.miniStatLabel {
+  color: var(--cmda-monitor-fg-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.miniStatValue {
+  font-weight: 700;
+  color: var(--cmda-monitor-fg);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.colorStrip {
+  display: flex;
+  height: 8px;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.stripInput {
+  background: var(--cmda-monitor-accent);
+}
+
+.stripCache {
+  background: var(--cmda-monitor-warn);
+}
+
+.stripOutput {
+  background: var(--cmda-monitor-success);
+}
+
+.stripReasoning {
+  background: var(--cmda-monitor-danger);
+}
+
+.statusLine {
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--cmda-monitor-warn);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Settings page */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 720px;
+}
+
+.card {
+  border: 1px solid var(--cmda-monitor-border);
+  border-radius: 12px;
+  background: var(--cmda-monitor-panel-bg);
+  padding: 14px 16px;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.cardHint {
+  font-size: 11px;
+  color: var(--cmda-monitor-fg-secondary);
+  margin-bottom: 10px;
+}
+
+.keyRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.input {
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 220px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--cmda-monitor-border);
+  background: var(--cmda-monitor-panel-bg);
+  color: var(--cmda-monitor-fg);
+  font-size: 13px;
+}
+
+.button {
+  box-sizing: border-box;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--cmda-monitor-border);
+  background: var(--cmda-monitor-card-bg);
+  color: var(--cmda-monitor-fg);
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.buttonPrimary {
+  border-color: var(--cmda-monitor-accent);
+  color: var(--cmda-monitor-accent);
+}
+
+.button:disabled {
+  opacity: .55;
+  cursor: default;
+}
+
+.keyState {
+  font-size: 11px;
+  color: var(--cmda-monitor-fg-secondary);
+}
+
+.dashboard {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+/* Circular usage gauge: blue→orange→red arc over a neutral ring. */
+.gaugeWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.gauge {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  display: grid;
+  place-items: center;
+}
+
+.gaugeSvg {
+  position: absolute;
+  inset: 0;
+}
+
+.gaugeArc {
+  transition: stroke-dasharray .4s ease;
+}
+
+.gaugeCenter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  max-width: 132px;
+}
+
+.gaugePercent {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.gaugeMeta {
+  font-size: 11px;
+  color: var(--cmda-monitor-fg-secondary);
+}
+
+.gaugeRemaining {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cmda-monitor-success);
+  font-variant-numeric: tabular-nums;
+}
+
+.gaugeLegend {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  max-width: 180px;
+  font-size: 11px;
+  color: var(--cmda-monitor-fg-secondary);
+}
+
+.gaugeLegendRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-variant-numeric: tabular-nums;
+}
+
+.gaugeLegendLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 0;
+}
+
+.gaugeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex: none;
+}
+
+.gaugeDotInfo {
+  background: var(--cmda-monitor-accent);
+}
+
+.gaugeDotWarn {
+  background: var(--cmda-monitor-warn);
+}
+
+.gaugeDotSuccess {
+  background: var(--cmda-monitor-success);
+}
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.barRow {
+  display: grid;
+  grid-template-columns: 96px 1fr 86px;
+  gap: 10px;
+  align-items: center;
+}
+
+.barLabel {
+  font-size: 12px;
+  color: var(--cmda-monitor-fg);
+}
+
+.barTrack {
+  position: relative;
+  height: 14px;
+  border-radius: 8px;
+  background: var(--cmda-monitor-track);
+  overflow: hidden;
+}
+
+.barFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 8px;
+}
+
+.barMeta {
+  font-size: 11px;
+  color: var(--cmda-monitor-fg-secondary);
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.statCard {
+  border: 1px solid var(--cmda-monitor-border);
+  border-radius: 10px;
+  background: var(--cmda-monitor-panel-bg);
+  padding: 10px 12px;
+}
+
+.statLabel {
+  font-size: 11px;
+  color: var(--cmda-monitor-fg-secondary);
+  margin-bottom: 4px;
+}
+
+.statValue {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--cmda-monitor-fg);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 760px) {
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  .statsRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
