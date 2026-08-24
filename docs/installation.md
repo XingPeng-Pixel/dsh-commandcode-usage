@@ -1,12 +1,26 @@
 # 安装
 
-## 本地开发安装
+## 方法一：本地源码添加（推荐开发/体验）
 
 ```bash
-dsh plugin --profile web add link:/绝对路径/dsh-commandgo-usage
+# 1. 克隆仓库
+git clone https://github.com/XingPeng-Pixel/dsh-commandcode-usage.git
+
+# 2. 进入项目目录
+cd dsh-commandcode-usage
+
+# 3. 安装依赖并构建（首次需要，生成 lib/）
+npm install
+npm run build
+
+# 4. 使用 DSH 官方插件命令添加本地源码
+#    link:$(pwd) 会自动展开为当前仓库的绝对路径
+dsh plugin --profile web add "link:$(pwd)"
 ```
 
-## 发布后安装
+> 也可以写成 `dsh plugin --profile web add link:/绝对路径/dsh-commandcode-usage`。
+
+## 方法二：从NPM源开始安装
 
 ```bash
 dsh plugin --profile web add dsh-commandcode-usage-monitor
