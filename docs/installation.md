@@ -1,6 +1,14 @@
 # 安装
 
-## 方法一：本地源码添加（推荐开发/体验）
+## 方法一：通过 npm 安装（推荐）
+
+插件已发布到 npm，可直接用 DSH 官方插件命令一键安装：
+
+```bash
+dsh plugin --profile web add dsh-commandcode-usage-monitor
+```
+
+## 方法二：本地源码添加（开发/体验）
 
 ```bash
 # 1. 克隆仓库
@@ -19,12 +27,6 @@ dsh plugin --profile web add "link:$(pwd)"
 ```
 
 > 也可以写成 `dsh plugin --profile web add link:/绝对路径/dsh-commandcode-usage`。
-
-## 方法二：从NPM源开始安装
-
-```bash
-dsh plugin --profile web add dsh-commandcode-usage-monitor
-```
 
 ## 只读 `~/.dsh` 场景
 

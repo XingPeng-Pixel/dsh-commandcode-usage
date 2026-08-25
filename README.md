@@ -4,6 +4,8 @@
   <img src="./assets/readme/hero.svg" width="100%" alt="dsh-commandcode-usage-monitor：DSH 插件，Command Code 用量实时监测；Host 侧抓取 /alpha/* 接口，浏览器侧提供侧边栏挂件与设置页仪表盘，且不接触明文 API Key" />
 </p>
 
+<p align="center"><b>中文</b> | <a href="./README.en.md">English</a></p>
+
 > DSH（DeepSeek Harness）插件：**Command Code 实时用量监测系统**。
 
 本插件运行在 DSH Host 侧，通过调用官方 CLI `/usage` 同源的 Command Code 账号接口（`/alpha/*`），实时抓取：
@@ -20,10 +22,12 @@
 
 ## 🚀 快速开始
 
-### 方法一：dsh 添加github源
+### 方法一：通过 npm 安装（推荐）
+
+插件已发布到 npm，可直接用 DSH 官方插件命令一键安装：
 
 ```bash
-dsh plugin --profile web add github:XingPeng-Pixel/dsh-commandcode-usage
+dsh plugin --profile web add dsh-commandcode-usage-monitor
 ```
 
 ### 方法二：克隆项目本地开发编译
