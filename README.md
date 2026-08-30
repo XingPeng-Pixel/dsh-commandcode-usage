@@ -219,6 +219,9 @@ npm run build
 
 ## 📚 文档
 
+- [项目设施与维护手册](docs/project-facilities.md)（完整技术栈 / 工作流 / 上游快速拾取）
+- [DSH 破坏性更新适配审计](docs/dsh-breaking-change-audit.md)
+- [0.1.2-comp 分支修改计划](docs/plan-0.1.2-comp.md)
 - [安装](docs/installation.md)
 - [配置](docs/configuration.md)
 - [API 接口](docs/api.md)

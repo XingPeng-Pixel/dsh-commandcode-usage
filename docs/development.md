@@ -28,11 +28,7 @@ curl http://127.0.0.1:3099/commandcode-usage/status.json
 curl http://127.0.0.1:3099/commandcode-usage/turn-cost.json
 ```
 
-或直接运行：
-
-```bash
-COMMANDCODE_API_KEY=user_xxx ./scripts/dev-loopback.sh 3099
-```
+> 注：README 曾提到的 `scripts/dev-loopback.sh` 当前仓库不存在；如需一键回环，需先补齐该脚本，或直接用上面的 `DSH_HOME=... dsh web ...` 命令。
 
 ## 速率与风控说明
 

@@ -30,11 +30,13 @@ dsh plugin --profile web add "link:$(pwd)"
 
 ## 只读 `~/.dsh` 场景
 
-如果 `~/.dsh` 被挂载为只读，无法直接 `dsh plugin --profile web add` 写入正式 profile。此时可使用项目内的 `scripts/dev-loopback.sh` 在可写 `DSH_HOME` 副本中回环验证，或解除只读后安装。
+如果 `~/.dsh` 被挂载为只读，无法直接 `dsh plugin --profile web add` 写入正式 profile。此时可在可写 `DSH_HOME` 副本中手动启动临时实例验证，或解除只读后安装。
 
 ```bash
-COMMANDCODE_API_KEY=user_xxx ./scripts/dev-loopback.sh 3099
+DSH_HOME=/path/to/writable-home COMMANDCODE_API_KEY=user_xxx dsh web --port 3099
 ```
+
+> 注：README 曾提到的 `scripts/dev-loopback.sh` 当前仓库不存在；如需一键回环，需先补齐该脚本。
 
 启动后访问：
 

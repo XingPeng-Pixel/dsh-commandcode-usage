@@ -1,6 +1,6 @@
 {
   "name": "dsh-commandcode-usage-monitor",
-  "version": "0.1.0",
+  "version": "0.1.2-comp.0",
   "description": "DSH 插件：Command Code 实时用量监测（Host 后端 + Browser 挂件/设置页）。抓取 /alpha/* 用量/额度窗口，暴露 HTTP JSON 查询接口与每轮消耗统计。",
   "keywords": [
     "dsh",
@@ -32,12 +32,12 @@
     },
     "client": {
       "inject": [
-        "@deepseek-ai/dsh-client-runtime",
         "@deepseek-ai/dsh-client-connection",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-renderer",
         "@deepseek-ai/dsh-client-ui-settings",
         "@deepseek-ai/dsh-client-ui-sidebar",
-        "@deepseek-ai/dsh-client-ui-slots",
-        "@deepseek-ai/dsh-client-locale"
+        "@deepseek-ai/dsh-api-remotes"
       ],
       "platform": "web"
     }
@@ -66,29 +66,29 @@
   "license": "MIT",
   "peerDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
-    "@deepseek-ai/dsh-commands": "^0.1.0-rc.6 || ^0.1.1-rc.1",
-    "@deepseek-ai/dsh-credentials": "^0.1.0-rc.6 || ^0.1.1-rc.1",
-    "@deepseek-ai/dsh-host-webserver": "^0.1.0-rc.6 || ^0.1.1-rc.1",
-    "@deepseek-ai/dsh-launch-environment": "^0.1.0-rc.6 || ^0.1.1-rc.1",
-    "@deepseek-ai/dsh-settings": "^0.1.0-rc.8",
+    "@deepseek-ai/dsh-commands": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-credentials": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-host-webserver": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-launch-environment": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-settings": "^0.1.2-alpha.1",
     "@deepseek-ai/schemastery": "^3.18.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@deepseek-ai/cordis": "^4.0.1",
-    "@deepseek-ai/dsh-api-remotes": "^0.1.0-rc.8",
-    "@deepseek-ai/dsh-client-connection": "^0.1.0-rc.8",
-    "@deepseek-ai/dsh-client-locale": "^0.1.0-rc.8",
-    "@deepseek-ai/dsh-client-runtime": "^0.1.0-rc.8",
-    "@deepseek-ai/dsh-client-ui-settings": "^0.1.0-rc.8",
-    "@deepseek-ai/dsh-client-ui-sidebar": "^0.1.0-rc.8",
-    "@deepseek-ai/dsh-client-ui-slots": "^0.1.0-rc.8",
-    "@deepseek-ai/dsh-commands": "^0.1.0-rc.6",
-    "@deepseek-ai/dsh-credentials": "^0.1.0-rc.6",
-    "@deepseek-ai/dsh-host-webserver": "^0.1.0-rc.6",
-    "@deepseek-ai/dsh-launch-environment": "^0.1.0-rc.6",
-    "@deepseek-ai/dsh-settings": "^0.1.0-rc.8",
+    "@deepseek-ai/dsh-api-remotes": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-client-connection": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-client-locale": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-client-ui-renderer": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-client-ui-settings": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-client-ui-sidebar": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-client-ui-slots": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-commands": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-credentials": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-host-webserver": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-launch-environment": "^0.1.2-alpha.1",
+    "@deepseek-ai/dsh-settings": "^0.1.2-alpha.1",
     "@deepseek-ai/schemastery": "^3.18.1",
     "@types/node": "^22.0.0",
     "@types/react": "^18.3.1",
