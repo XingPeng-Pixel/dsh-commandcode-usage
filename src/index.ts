@@ -13,7 +13,8 @@
 
 import type { Context } from '@deepseek-ai/cordis'
 import { credentialRef } from '@deepseek-ai/dsh-credentials'
-import { installSettingsSection, settingsNamespace } from '@deepseek-ai/dsh-settings'
+// Type-only: pulls the `ctx.settings` Context augmentation from dsh-settings.
+import type {} from '@deepseek-ai/dsh-settings'
 import z from '@deepseek-ai/schemastery'
 import { Config, resolveConfig } from './config.ts'
 import type { Config as ConfigType } from './config.ts'
@@ -27,7 +28,7 @@ import { resolveApiKey } from './credentials.ts'
 import { registerUiRoutes } from './ui-routes.ts'
 
 /** Settings namespace registered in the Host for the browser UI page. */
-export const UI_SETTINGS_NAMESPACE = settingsNamespace('commandcode-usage-ui')
+export const UI_SETTINGS_NAMESPACE = 'commandcode-usage-ui' as const
 
 /** Schema for the UI preference namespace. */
 export const UiConfig: z<ConfigType['ui']> = z.object({
@@ -215,11 +216,13 @@ export function apply(ctx: Context, rawConfig: ConfigType): void {
   // through the client settings scope; the Host keeps the source for host-side
   // dynamic behavior.
   let uiSource: () => ConfigType['ui'] = () => cfg().ui ?? {}
-  installSettingsSection(ctx, UI_SETTINGS_NAMESPACE, UiConfig, cfg().ui ?? {}, {
-    setSource: (source) => {
-      uiSource = source
-    },
-    onChange: () => {},
+  ctx.inject(['settings'], (settingsCtx) => {
+    settingsCtx.settings.installSection(ctx, UI_SETTINGS_NAMESPACE, UiConfig, cfg().ui ?? {}, {
+      setSource: (source) => {
+        uiSource = source
+      },
+      onChange: () => {},
+    })
   })
 
   // The `/commandcode-usage` command rides the optional `commands` service:
